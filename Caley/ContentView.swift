@@ -69,67 +69,23 @@ let people2 = [
 ]
 
 struct ContentView: View {
-    
-    @State private var topViewHeight: CGFloat = 480
-    
-    @State private var menuItems = menu
-    @State public var selectedMenu = 1
-    
-    @State private var dragState = DragState.inactive
-    
-    let minHeight: CGFloat = 100
-    let snapThreshold: CGFloat = 200
-    
+    @EnvironmentObject private var auth: MockAuthModel
     
     var body: some View {
-        GeometryReader { geometry in
-            VStack (alignment: .center, spacing: 0) {
-                TopView(topViewHeight: $topViewHeight, title: menuItems.first(where: { $0.id == selectedMenu })?.name ?? "Inbox", count: menuItems.first(where: { $0.id == selectedMenu })?.count ?? "0")
-                    .frame(width: geometry.size.width, height: topViewHeight)
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
+        switch auth.state {
+        case .signedIn:
+            MailboxView()
+            
+        case .notSignedIn(let error):
+            LoginView(error: error) {
+                signin in
                 
-                HStack {
-                    Spacer()
-                    RoundedRectangle(cornerRadius: 10)
-                        .frame(width: 50, height: 10)
-                        .scaleEffect(dragState.isDragging ? 0.8 : 1.0)
-                        .foregroundColor(.gray.opacity(0.4))
-                        .padding(.vertical, 10)
-                        .gesture(
-                            DragGesture()
-                                .onChanged { gesture in
-                                    self.dragState = .dragging(translation: gesture.translation)
-                                    let dragAmount = gesture.translation.height
-                                    let newHeight = max(minHeight, min(geometry.size.height - minHeight, topViewHeight + dragAmount))
-                                    if newHeight != topViewHeight {
-                                        topViewHeight = newHeight
-                                    }
-                                }
-                                .onEnded { _ in
-                                    self.dragState = .inactive
-                                    withAnimation(.spring()) {
-                                        let newHeight = topViewHeight
-                                        if newHeight < minHeight + snapThreshold {
-                                            topViewHeight = minHeight
-                                        } else if (geometry.size.height - newHeight) < minHeight + snapThreshold {
-                                            topViewHeight = geometry.size.height - minHeight
-                                        }
-                                    }
-                                }
-                        )
-                    Spacer()
-                }
-                
-                BottomView(menuItems: $menuItems, selectedMenu: $selectedMenu, topViewHeight: topViewHeight, totalHeight: geometry.size.height)
-                    .frame(width: geometry.size.width, height: geometry.size.height - topViewHeight - 30)
-                    .background(Color(.secondarySystemBackground))
-                    .clipShape(RoundedRectangle(cornerRadius: 24, style: .continuous))
-                
+                print("got signin \(signin)")
             }
+            
+        case .signingUp(_):
+            RegisterView()
         }
-        .ignoresSafeArea()
-        .background(.black)
     }
 }
 
@@ -155,218 +111,6 @@ enum DragState {
         }
     }
 }
-
-struct TopView: View {
-    @State private var lastKnownOrientation = DeviceOrientation.portrait
-    
-    let motionManager = CMMotionManager()
-    @State private var firstArrayIsActive = true
-    @State private var people = people1
-    @State private var scale: CGFloat = 0
-    @State private var opacity: Double = 0
-    @State private var offset: Double = -75
-    @State private var blur: Double = 25
-    
-    @Binding var topViewHeight: CGFloat
-    let title: String
-    let count: String
-    let minHeight: CGFloat = 200
-    
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            if topViewHeight > minHeight {
-                Text(title)
-                    .font(.title2)
-                    .fontWeight(.bold)
-            }
-            
-            HStack {
-                VStack(alignment: .leading, spacing: 8) {
-                    Text("Unread")
-                        .font(.system(size: topViewHeight > minHeight ? 16 : 25 , weight: .bold))
-                }
-                
-                Spacer()
-                
-                Text(count)
-                    .font(.system(size: topViewHeight > minHeight ? 16 : 25 , weight: .bold, design: .rounded))
-            }
-            
-            if topViewHeight > minHeight {
-                ScrollView {
-                    ForEach(people, id: \.id) { person in
-                        HStack (alignment: .center, spacing: 16) {
-                            Image(person.imageName)
-                                .resizable()
-                                .frame(width: 48, height: 48)
-                                .clipShape(Circle())
-                            
-                            VStack (alignment: .leading) {
-                                HStack {
-                                    Text(person.name)
-                                        .font(.system(size: 16.0, weight: .bold, design: .rounded))
-                                    
-                                    Spacer()
-                                    
-                                    
-                                    Text("\(person.time)")
-                                        .opacity(0.5)
-                                        .font(.system(size: 16.0, weight: .medium, design: .rounded))
-                                    
-                                }
-                                
-                                Text(person.post)
-                                    .offset(y: 4)
-                                    .font(.system(size: 16.0, design: .rounded))
-                                
-                            }
-                        }
-                        .padding()
-                        .background(.gray.opacity(0.20))
-                        .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
-                        .frame(maxWidth: .infinity, minHeight: 100, idealHeight: 100, maxHeight: 100)
-                        .scaleEffect(scale)
-                        .opacity(opacity)
-                        .offset(y: offset)
-                        .blur(radius: blur)
-                        .onAppear {
-                            withAnimation(.spring().delay(Double(person.id%5 + 1) * 0.5)) {
-                                scale = 1
-                                opacity = 1
-                                offset = 0
-                                blur = 0
-                            }
-                        }
-                    }
-                }
-                .scrollIndicators(.hidden)
-                .onAppear {
-                    if motionManager.isDeviceMotionAvailable {
-                        motionManager.deviceMotionUpdateInterval = 0.02
-                        motionManager.startDeviceMotionUpdates(to: OperationQueue.main) { (data, error) in
-                            if let data = data {
-                                
-                                self.handleDeviceMotionUpdate(data)
-                            }
-                        }
-                    }
-                }
-                .onDisappear {
-                    motionManager.stopDeviceMotionUpdates()
-                }
-                .statusBarHidden(true)
-            }
-        }
-        .padding([.top, .horizontal], 20)
-        .font(.system(size: 16, weight: .medium, design: .rounded))
-    }
-    
-    func handleDeviceMotionUpdate(_ data: CMDeviceMotion) {
-        
-        let gravity = data.gravity
-        let upsideDown = gravity.z > 0.8
-        let portrait = gravity.z < -0.8
-        
-        if upsideDown {
-            lastKnownOrientation = .upsideDown
-        } else if portrait && lastKnownOrientation == .upsideDown {
-            lastKnownOrientation = .portrait
-            withAnimation {
-                withAnimation(.spring()) {
-                    scale = 0
-                    opacity = 0
-                    offset = -75
-                    blur = 25
-                }
-                self.people = firstArrayIsActive ? people2 : people1
-                firstArrayIsActive.toggle()
-                withAnimation(.spring()) {
-                    scale = 1
-                    opacity = 1
-                    offset = 0
-                    blur = 0
-                }
-            }
-        }
-    }
-}
-
-struct BottomView: View {
-    @Binding var menuItems: [MenuItem]
-    @Binding var selectedMenu: Int
-    
-    var topViewHeight: CGFloat
-    let minHeight: CGFloat = 200
-    let totalHeight: CGFloat
-    
-    var body: some View {
-        VStack(alignment: .leading, spacing: 16) {
-            
-            if totalHeight - topViewHeight - 30 > minHeight {
-                ScrollView {
-                    ForEach(menuItems, id: \.id) { item in
-                        Button(action: {
-                            self.selectedMenu = item.id
-                        }) {
-                            HStack {
-                                Image(systemName: item.icon)
-                                Text(item.name)
-                                    .font(.system(size: 16.0, weight: .medium))
-                                
-                                Spacer()
-                                
-                                Text(item.count)
-                                    .font(.system(size: 16.0, weight: .medium))
-                            }.padding([.vertical], 6)
-                            
-                            Spacer()
-                        }
-                        .foregroundColor(Color(.label))
-                        .padding([.horizontal], 5)
-                        .padding([.vertical], 2)
-                        .background(selectedMenu == item.id ? .gray.opacity(0.20) : Color.white.opacity(0.0))
-                        .cornerRadius(6.0)
-                    }
-                }.scrollIndicators(.hidden)
-            } else {
-                ScrollView(.horizontal) {
-                    HStack {
-                        ForEach(menuItems, id: \.id) { item in
-                            Button(action: {
-                                self.selectedMenu = item.id
-                            }) {
-                                HStack {
-                                    Image(systemName: item.icon)
-                                    Text(item.name)
-                                        .font(.system(size: 16.0, weight: .medium))
-                                }.underline(selectedMenu == item.id ? true : false)
-                            }
-                            .padding([.horizontal], 8)
-                            .foregroundColor(Color(.label))
-                            
-                            
-                        }
-                        
-                    }
-                }.scrollIndicators(.hidden)
-            }
-        }
-        .frame(maxWidth: .infinity)
-        .padding(20)
-        .font(.system(size: 16, weight: .medium
-                      , design: .rounded))
-    }
-    
-    func getDay(for index: Int) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE"
-        let day = Calendar.current.date(byAdding: .day, value: index, to: Date())!
-        return dateFormatter.string(from: day)
-    }
-}
-
-
 
 #Preview {
     ContentView()

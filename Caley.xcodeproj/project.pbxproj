@@ -7,6 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		3F1E6A632B84A2F300553D32 /* LoginView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1E6A622B84A2F300553D32 /* LoginView.swift */; };
+		3F1E6A652B84A32100553D32 /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1E6A642B84A32100553D32 /* RegisterView.swift */; };
+		3F1E6A6A2B84A37900553D32 /* MailboxView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1E6A692B84A37900553D32 /* MailboxView.swift */; };
+		3F1E6A6C2B84A3C200553D32 /* TopView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1E6A6B2B84A3C200553D32 /* TopView.swift */; };
+		3F1E6A6E2B84A3E100553D32 /* BottomView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1E6A6D2B84A3E100553D32 /* BottomView.swift */; };
+		3F1E6A6F2B84A45900553D32 /* AuthModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1E6A5F2B84A2BF00553D32 /* AuthModel.swift */; };
 		3FA70EEC2B7B66BC00AF7F4B /* CaleyApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA70EEB2B7B66BC00AF7F4B /* CaleyApp.swift */; };
 		3FA70EEE2B7B66BC00AF7F4B /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3FA70EED2B7B66BC00AF7F4B /* ContentView.swift */; };
 		3FA70EF02B7B66BD00AF7F4B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 3FA70EEF2B7B66BD00AF7F4B /* Assets.xcassets */; };
@@ -34,6 +40,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		3F1E6A5F2B84A2BF00553D32 /* AuthModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthModel.swift; sourceTree = "<group>"; };
+		3F1E6A622B84A2F300553D32 /* LoginView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginView.swift; sourceTree = "<group>"; };
+		3F1E6A642B84A32100553D32 /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		3F1E6A692B84A37900553D32 /* MailboxView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MailboxView.swift; sourceTree = "<group>"; };
+		3F1E6A6B2B84A3C200553D32 /* TopView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopView.swift; sourceTree = "<group>"; };
+		3F1E6A6D2B84A3E100553D32 /* BottomView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BottomView.swift; sourceTree = "<group>"; };
 		3FA70EE82B7B66BC00AF7F4B /* Caley.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Caley.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		3FA70EEB2B7B66BC00AF7F4B /* CaleyApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CaleyApp.swift; sourceTree = "<group>"; };
 		3FA70EED2B7B66BC00AF7F4B /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -72,6 +84,57 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		3F1E6A5E2B84A2B300553D32 /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				3F1E6A612B84A2D300553D32 /* Views */,
+				3F1E6A602B84A2CA00553D32 /* Models */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		3F1E6A602B84A2CA00553D32 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3F1E6A612B84A2D300553D32 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3F1E6A622B84A2F300553D32 /* LoginView.swift */,
+				3F1E6A642B84A32100553D32 /* RegisterView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
+		3F1E6A662B84A35400553D32 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				3F1E6A682B84A36200553D32 /* Views */,
+				3F1E6A672B84A35D00553D32 /* Models */,
+			);
+			path = Home;
+			sourceTree = "<group>";
+		};
+		3F1E6A672B84A35D00553D32 /* Models */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		3F1E6A682B84A36200553D32 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				3F1E6A692B84A37900553D32 /* MailboxView.swift */,
+				3F1E6A6B2B84A3C200553D32 /* TopView.swift */,
+				3F1E6A6D2B84A3E100553D32 /* BottomView.swift */,
+			);
+			path = Views;
+			sourceTree = "<group>";
+		};
 		3FA70EDF2B7B66BC00AF7F4B = {
 			isa = PBXGroup;
 			children = (
@@ -95,7 +158,10 @@
 		3FA70EEA2B7B66BC00AF7F4B /* Caley */ = {
 			isa = PBXGroup;
 			children = (
+				3F1E6A5E2B84A2B300553D32 /* Authentication */,
+				3F1E6A662B84A35400553D32 /* Home */,
 				3FA70EEB2B7B66BC00AF7F4B /* CaleyApp.swift */,
+				3F1E6A5F2B84A2BF00553D32 /* AuthModel.swift */,
 				3FA70EED2B7B66BC00AF7F4B /* ContentView.swift */,
 				3FA70EEF2B7B66BD00AF7F4B /* Assets.xcassets */,
 				3FA70EF12B7B66BD00AF7F4B /* Caley.entitlements */,
@@ -259,8 +325,14 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				3F1E6A6C2B84A3C200553D32 /* TopView.swift in Sources */,
 				3FA70EEE2B7B66BC00AF7F4B /* ContentView.swift in Sources */,
+				3F1E6A652B84A32100553D32 /* RegisterView.swift in Sources */,
+				3F1E6A6E2B84A3E100553D32 /* BottomView.swift in Sources */,
 				3FA70EEC2B7B66BC00AF7F4B /* CaleyApp.swift in Sources */,
+				3F1E6A6F2B84A45900553D32 /* AuthModel.swift in Sources */,
+				3F1E6A6A2B84A37900553D32 /* MailboxView.swift in Sources */,
+				3F1E6A632B84A2F300553D32 /* LoginView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
