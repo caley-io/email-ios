@@ -7,6 +7,7 @@
 
 import SwiftUI
 import CoreMotion
+import SwiftData
 
 struct Person {
     let imageName: String
@@ -24,6 +25,7 @@ struct MenuItem {
     let icon: String
     let count: String
 }
+
 
 enum DeviceOrientation {
     case unknown, portrait, upsideDown
@@ -70,6 +72,12 @@ let people2 = [
 
 struct ContentView: View {
     @EnvironmentObject private var auth: MockAuthModel
+    @AppStorage("lastFetched") private var lastFetched: Double = Date.now.timeIntervalSince1970
+    @Environment(\.modelContext) private var modelContext
+    
+    @Query private var actions: [Action]
+    
+    @State private var isLoading: Bool = false
     
     var body: some View {
         switch auth.state {
@@ -114,4 +122,5 @@ enum DragState {
 
 #Preview {
     ContentView()
+        .modelContainer(for: [Action.self])
 }

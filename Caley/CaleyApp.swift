@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
 struct CaleyApp: App {
@@ -13,6 +14,7 @@ struct CaleyApp: App {
         WindowGroup {
             ContentView()
                 .environmentObject(MockAuthModel())
+                .modelContainer(for: [Action.self, Email.self])
         }
     }
 }

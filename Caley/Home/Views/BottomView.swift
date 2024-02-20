@@ -6,130 +6,116 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct BottomView: View {
-    @EnvironmentObject private var auth: MockAuthModel
+    @State private var scale: CGFloat = 0
+    @State private var opacity: Double = 0
+    @State private var offset: Double = -75
+    @State private var blur: Double = 25
     
-    @Binding var menuItems: [MenuItem]
-    @Binding var selectedMenu: Int
+    @AppStorage("lastEmailsFetched") private var lastFetched: Double = Date.now.timeIntervalSince1970
+    @Environment(\.modelContext) private var modelContext
     
-    var topViewHeight: CGFloat
-    let minHeight: CGFloat = 200
-    let totalHeight: CGFloat
+    @Query(sort: \Email.id) private var emails: [Email]
+    
+    @State private var isLoading: Bool = false
+    
     
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
+            HStack {
+                VStack(alignment: .leading, spacing: 8) {
+                    Text("Unread")
+                        .font(.system(size: 16, weight: .bold))
+                }
+                
+                Spacer()
+            }
             
-            if totalHeight - topViewHeight - 30 > minHeight {
-                ScrollView {
-                    ForEach(menuItems, id: \.id) { item in
-                        #if os(macOS)
-                        Button(action: {
-                            self.selectedMenu = item.id
-                        }) {
+            ScrollView {
+                ForEach(emails, id: \.id) { email in
+                    HStack (alignment: .center, spacing: 16) {
+                        AsyncImage(url: .init(string: email.userAvatar)) { image in
+                            image
+                                .resizable()
+                                .frame(width: 48, height: 48)
+                                .clipShape(Circle())
+                        } placeholder: {
+                            ProgressView()
+                        }
+                        
+                        VStack (alignment: .leading) {
                             HStack {
-                                Image(systemName: item.icon)
-                                Text(item.name)
-                                    .font(.system(size: 16.0, weight: .medium))
+                                Text(email.from)
+                                    .font(.system(size: 16.0, weight: .bold, design: .rounded))
                                 
                                 Spacer()
-                                
-                                Text(item.count)
-                                    .font(.system(size: 16.0, weight: .medium))
-                            }.padding([.vertical], 6)
-                            
-                            Spacer()
-                        }
-                        
-                        .foregroundColor(Color(NSColor.labelColor))
-                        .padding([.horizontal], 5)
-                        .padding([.vertical], 2)
-                        .background(selectedMenu == item.id ? .gray.opacity(0.20) : Color.white.opacity(0.0))
-                        .cornerRadius(6.0)
-                        
-                        #else
-                        Button(action: {
-                            self.selectedMenu = item.id
-                        }) {
-                            HStack {
-                                Image(systemName: item.icon)
-                                Text(item.name)
-                                    .font(.system(size: 16.0, weight: .medium))
-                                
-                                Spacer()
-                                
-                                Text(item.count)
-                                    .font(.system(size: 16.0, weight: .medium))
-                            }.padding([.vertical], 6)
-                            
-                            Spacer()
-                        }
-                        .foregroundColor(Color(.label))
-                        .padding([.horizontal], 5)
-                        .padding([.vertical], 2)
-                        .background(selectedMenu == item.id ? .gray.opacity(0.20) : Color.white.opacity(0.0))
-                        .cornerRadius(6.0)
-                        #endif
-                    }
-                    Button(action: {
-                        auth.logout()
-                    }) {
-                        Text("Logout")
-                    }
-                    
-                }.scrollIndicators(.hidden)
-            } else {
-                ScrollView(.horizontal) {
-                    HStack {
-                        ForEach(menuItems, id: \.id) { item in
-                            #if os(macOS)
-                            Button(action: {
-                                self.selectedMenu = item.id
-                            }) {
-                                HStack {
-                                    Image(systemName: item.icon)
-                                    Text(item.name)
-                                        .font(.system(size: 16.0, weight: .medium))
-                                }.underline(selectedMenu == item.id ? true : false)
                             }
-                            .padding([.horizontal], 8)
-                            .foregroundColor(Color(NSColor.labelColor))
-                            #else
-                            Button(action: {
-                                self.selectedMenu = item.id
-                            }) {
-                                HStack {
-                                    Image(systemName: item.icon)
-                                    Text(item.name)
-                                        .font(.system(size: 16.0, weight: .medium))
-                                }.underline(selectedMenu == item.id ? true : false)
-                            }
-                            .padding([.horizontal], 8)
-                            .foregroundColor(Color(.label))
-                            #endif
                             
+                            Text(email.subject)
+                                .offset(y: 4)
+                                .font(.system(size: 16.0, design: .rounded))
                         }
-                        
-                        Button(action: {
-                            auth.logout()
-                        }) {
-                            Text("Logout")
-                        }
-                        
                     }
-                }.scrollIndicators(.hidden)
+                    .padding()
+                    .background(.gray.opacity(0.20))
+                    .clipShape(RoundedRectangle(cornerRadius: 14, style: .continuous))
+                }
+            }
+            .scrollIndicators(.hidden)
+            
+        }
+        .padding([.top], 20)
+        .font(.system(size: 16, weight: .medium, design: .rounded))
+        .task {
+            do {
+                isLoading = true
+                defer { isLoading = false }
+                
+                if hasExceededFetchLimit() || emails.isEmpty {
+                    try clearEmails()
+                    try await fetchEmails()
+                }
+            } catch {
+                print(error)
             }
         }
-        .frame(maxWidth: .infinity)
-        .padding(20)
-        .font(.system(size: 16, weight: .medium
-                      , design: .rounded))
+        .overlay {
+            if isLoading {
+                ProgressView()
+            }
+        }
+    }
+}
+
+private extension BottomView {
+    func clearEmails() throws {
+        _ = try modelContext.delete(model: Email.self)
+    }
+
+    func fetchEmails() async throws {
+        let url = URL(string: "https://mockend.com/api/caley-io/caley-app/emails")!
+        let request = URLRequest(url: url)
+        let (data, _) = try await URLSession.shared.data(for: request)
+
+        let emails = try JSONDecoder().decode([Email].self, from: data)
+
+        emails.forEach { modelContext.insert($0) }
+
+        lastFetched = Date.now.timeIntervalSince1970
     }
     
-    func getDay(for index: Int) -> String {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "EEEE"
-        let day = Calendar.current.date(byAdding: .day, value: index, to: Date())!
-        return dateFormatter.string(from: day)
+    func hasExceededFetchLimit() -> Bool {
+        
+        let timeLimit = 300 // 5 mins
+        let currentTime = Date.now
+        let lastFetchedTime = Date(timeIntervalSince1970: lastFetched)
+        
+        guard let differenceInMins = Calendar.current.dateComponents([.second], from: lastFetchedTime, to: currentTime).second else {
+            return false
+        }
+        return differenceInMins >= timeLimit
     }
+    
 }
