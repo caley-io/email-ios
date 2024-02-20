@@ -1,0 +1,17 @@
+models:
+  Email:
+    hasMany: [Action]
+    fake:
+      _count: 50
+      subject: { loremWords: [5, 20] }
+      from: email
+      to: email
+      body: { loremParagraphs: [10, 100] }
+      summary: { loremParagraphs: [10, 30] }
+      urgency: word
+  Action:
+    belongsTo: [Email]
+    fake:
+      _count: 5
+      title: { loremParagraphs: [5, 20] }
+      status: word
