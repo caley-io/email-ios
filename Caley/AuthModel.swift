@@ -36,6 +36,8 @@ protocol AuthModel: AnyObject & ObservableObject {
     func signUp()
     
     func register(method: AuthRegister)
+    
+    func logout()
 }
 
 final class MockAuthModel: AuthModel {
@@ -64,6 +66,10 @@ final class MockAuthModel: AuthModel {
     }
     
     func signIn() {
+        state = .notSignedIn(error: nil)
+    }
+    
+    func logout() {
         state = .notSignedIn(error: nil)
     }
 }

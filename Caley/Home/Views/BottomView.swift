@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct BottomView: View {
+    @EnvironmentObject private var auth: MockAuthModel
+    
     @Binding var menuItems: [MenuItem]
     @Binding var selectedMenu: Int
     
@@ -69,6 +71,12 @@ struct BottomView: View {
                         .cornerRadius(6.0)
                         #endif
                     }
+                    Button(action: {
+                        auth.logout()
+                    }) {
+                        Text("Logout")
+                    }
+                    
                 }.scrollIndicators(.hidden)
             } else {
                 ScrollView(.horizontal) {
@@ -100,6 +108,12 @@ struct BottomView: View {
                             .foregroundColor(Color(.label))
                             #endif
                             
+                        }
+                        
+                        Button(action: {
+                            auth.logout()
+                        }) {
+                            Text("Logout")
                         }
                         
                     }
