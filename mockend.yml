@@ -1,9 +1,8 @@
 models:
   Email:
-    hasMany: [Action]
     fake:
-      _count: 50
-      subject: { loremWords: [5, 20] }
+      _count: 25
+      subject: { loremWords: [10, 30] }
       from: email
       userAvatar: { imageURL: [1024, 1024] }
       to: email
@@ -11,7 +10,6 @@ models:
       summary: { loremParagraphs: [10, 30] }
       urgency: word
   Action:
-    belongsTo: [Email]
     fake:
       _count: 5
       title: { loremParagraphs: [5, 20] }
