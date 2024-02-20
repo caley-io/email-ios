@@ -5,6 +5,7 @@ models:
       _count: 50
       subject: { loremWords: [5, 20] }
       from: email
+      userAvatar: { imageURL: [1024, 1024] }
       to: email
       body: { loremParagraphs: [10, 100] }
       summary: { loremParagraphs: [10, 30] }
