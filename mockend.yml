@@ -15,3 +15,5 @@ models:
       _count: 5
       title: { loremParagraphs: [5, 20] }
       status: word
+      from: name
+      userAvatar: { imageURL: [1024, 1024] }
