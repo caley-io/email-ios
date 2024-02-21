@@ -12,6 +12,7 @@ enum AuthState: Codable {
     case signedIn
     case notSignedIn(error: String?)
     case signingUp(AuthSignUpState)
+    case onboardingNotCompleted
 }
 
 struct AuthSignUpState: Codable {
@@ -41,7 +42,7 @@ protocol AuthModel: AnyObject & ObservableObject {
 }
 
 final class MockAuthModel: AuthModel {
-    @Published var state = AuthState.notSignedIn(error: nil)
+    @Published var state = AuthState.onboardingNotCompleted
     
     func login(method: AuthSignIn) {
         switch method {

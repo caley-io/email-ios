@@ -81,6 +81,8 @@ struct ContentView: View {
     
     var body: some View {
         switch auth.state {
+        case .onboardingNotCompleted:
+            OnboardingView()
         case .signedIn:
             MailboxView()
             
