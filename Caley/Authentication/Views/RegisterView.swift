@@ -10,33 +10,72 @@ import SwiftUI
 struct RegisterView: View {
     @EnvironmentObject private var auth: MockAuthModel
     
-    @State private var name = ""
-    @State private var email = ""
-    @State private var password = ""
+    @State var value: Int = 1
+    @State var numberOfStep: Int = 6
+    @State var step: Int = 0
     
-    var error: String?
-
-    var body: some View {
-        VStack {
-            if let error {
-                Text(error).foregroundStyle(.red)
-                Divider()
-            }
-            TextField("Name", text: $name)
-            TextField("Email", text: $email)
-            TextField("Password", text: $password)
-
-
-            HStack {
-                Button("Sign In") {
-                    auth.signIn()
-                }
-                
-                Button("Sign Up") {
-                    auth.register(method: .standard(name: name, email: email, password: password))
-                }
-            }
+    @State var username: String = ""
+    @State var firstName: String = ""
+    @State var lastName: String = ""
+    @State var password: String = ""
+    @State var confirmationCode: String = ""
+    
+    let elements: [Any] = [MailView.self, FirstName.self, LastName.self, Password.self, ConfirmationCode.self, Success.self]
+    
+    func buildView(types: [Any], index: Int) -> AnyView {
+        
+        switch types[index].self {
+        case is MailView.Type: return AnyView( MailView(username: $username) )
+        case is FirstName.Type: return AnyView( FirstName(firstName: $firstName) )
+        case is LastName.Type: return AnyView( LastName(lastName: $lastName) )
+        case is Password.Type: return AnyView( Password(password: $password) )
+        case is ConfirmationCode.Type: return AnyView( ConfirmationCode(confirmationCode: $confirmationCode) )
+        case is Success.Type: return AnyView( Success() )
+        default: return AnyView(EmptyView())
         }
-        .padding()
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading) {
+            VStack(alignment: .leading) {
+                Button(action: {
+                    self.step -= 1
+                    self.value -= 1
+                }) {
+                    Image(systemName: "chevron.left")
+                        .foregroundColor(self.step == 0 || self.step == 5 ? .clear : .white)
+                        .font(.system(size: 20, weight: .black))
+                }
+            }
+            
+            VStack(alignment: .leading) {
+                buildView(types: elements, index: step)
+            }
+            Spacer()
+            
+            if self.step != self.numberOfStep - 1 {
+                VStack {
+                    ProgressBar(value: $value, numberOfStep: $numberOfStep)
+                    
+                    RoundedButton(action: {
+                        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to:nil, from:nil, for:nil)
+                        if self.step == 3 {
+                            self.step += 1
+                            self.value += 1
+                        } else if self.step < self.numberOfStep - 2 {
+                            self.step += 1
+                            self.value += 1
+                        } else {
+                            
+                            auth.state = .signedIn
+                        }
+                    }, text: self.step == 3 ?
+                        "Sign up" :
+                        self.step < self.numberOfStep - 2 ?
+                            "Next" :
+                        "Confirm" , variant: "dark").padding(.top, 10)
+                }
+            }
+        }.padding(.bottom, 40)
     }
 }

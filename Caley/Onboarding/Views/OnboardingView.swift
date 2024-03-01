@@ -11,6 +11,9 @@ struct OnboardingView: View {
     @EnvironmentObject private var auth: MockAuthModel
     @State var emails: [Mail] = []
     
+    @State private var authState = "welcome"
+    @State private var showAuthenticationModal = false
+    
     var body: some View {
         ZStack {
             VStack{
@@ -47,6 +50,7 @@ struct OnboardingView: View {
                 VStack {
                     Button(action: {
                         auth.signUp()
+                        self.showAuthenticationModal = true
                     }) {
                             Text("Sign up")
                             .padding()
@@ -60,6 +64,7 @@ struct OnboardingView: View {
                     
                     Button(action: {
                         auth.signIn()
+                        self.showAuthenticationModal = true
                     }) {
                             Text("Login")
                               .padding()
@@ -72,6 +77,23 @@ struct OnboardingView: View {
                 }.padding(.all)
             }
             
+        }
+        .sheet(isPresented: $showAuthenticationModal) {
+                VStack(alignment: .leading) {
+                    if auth.isAuthState == .signinUp  {
+                        RegisterView()
+                    } else {
+                        LoginView(error: nil) {
+                            signin in
+                            
+                            print("got signin \(signin)")
+                        }
+                    }
+                }
+                .padding(.all, 10)
+                .padding(.top, 20)
+                .background(Color(UIColor.systemBackground))
+                .edgesIgnoringSafeArea([.all])
         }
     }
     

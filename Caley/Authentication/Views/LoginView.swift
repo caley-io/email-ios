@@ -18,24 +18,16 @@ struct LoginView: View {
     
     var body: some View {
         VStack {
-            if let error {
-                Text(error).foregroundStyle(.red)
-                Divider()
-            }
-            TextField("User Name", text: $username)
-            TextField("Password", text: $password)
-
-
-            HStack {
-                Button("Sign In") {
-                    auth.login(method: .standard(name: username, password: password))
-                }
+            
+                Input(text: $username, placeholder: "Enter your email", label: "Email", isSecure: false)
+                Input(text: $password, placeholder: "Enter your password", label: "Password", isSecure: true)
                 
-                Button("Sign Up") {
-                    auth.signUp()
-                }
-            }
-        }
-        .padding()
+                Spacer()
+                
+                RoundedButton(action: {
+                    auth.state = .signedIn
+            }, text: "Login", variant: "dark").padding(.top, 10)
+            
+        }.padding(.bottom, 40)
     }
 }

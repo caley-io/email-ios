@@ -20,48 +20,35 @@ struct ContentView: View {
     
     var body: some View {
         switch auth.state {
-        case .onboardingNotCompleted:
-            OnboardingView()
+            
         case .signedIn:
             MailboxView()
             
         case .notSignedIn(let error):
-            LoginView(error: error) {
-                signin in
-                
-                print("got signin \(signin)")
+            OnboardingView()
+        }
+    }
+    
+    enum DragState {
+        case inactive
+        case dragging(translation: CGSize)
+        
+        var translation: CGSize {
+            switch self {
+            case .inactive:
+                return .zero
+            case .dragging(let translation):
+                return translation
             }
-            
-        case .signingUp(_):
-            RegisterView()
+        }
+        
+        var isDragging: Bool {
+            switch self {
+            case .inactive:
+                return false
+            case .dragging:
+                return true
+            }
         }
     }
-}
-
-enum DragState {
-    case inactive
-    case dragging(translation: CGSize)
-    
-    var translation: CGSize {
-        switch self {
-        case .inactive:
-            return .zero
-        case .dragging(let translation):
-            return translation
-        }
-    }
-    
-    var isDragging: Bool {
-        switch self {
-        case .inactive:
-            return false
-        case .dragging:
-            return true
-        }
-    }
-}
-
-#Preview {
-    ContentView()
-        .modelContainer(for: [Action.self])
 }
