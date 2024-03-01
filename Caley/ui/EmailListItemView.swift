@@ -69,7 +69,6 @@ struct EmailListItemView: View {
             
             Spacer()
         }
-        .background(.highlight)
         .padding(.bottom, 7)
     }
 }

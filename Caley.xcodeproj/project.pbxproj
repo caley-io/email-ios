@@ -16,11 +16,6 @@
 		3F1E6A712B84D09A00553D32 /* EmailModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1E6A702B84D09A00553D32 /* EmailModel.swift */; };
 		3F1E6A732B84D0A400553D32 /* ActionModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1E6A722B84D0A400553D32 /* ActionModel.swift */; };
 		3F1E6A772B85E6CC00553D32 /* OnboardingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1E6A762B85E6CC00553D32 /* OnboardingView.swift */; };
-		3F1E6A792B85E6E200553D32 /* FirstView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1E6A782B85E6E200553D32 /* FirstView.swift */; };
-		3F1E6A7B2B85E6ED00553D32 /* SecondView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1E6A7A2B85E6ED00553D32 /* SecondView.swift */; };
-		3F1E6A7E2B85E76F00553D32 /* TypingEffect.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1E6A7D2B85E76F00553D32 /* TypingEffect.swift */; };
-		3F1E6A802B85E9C900553D32 /* HomeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1E6A7F2B85E9C900553D32 /* HomeView.swift */; };
-		3F1E6A822B85EBBB00553D32 /* GeoView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F1E6A812B85EBBB00553D32 /* GeoView.swift */; };
 		3F5804382B90D5F2003D1D82 /* FooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5804312B90D5F2003D1D82 /* FooterView.swift */; };
 		3F5804392B90D5F2003D1D82 /* FooterClosedButtonsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5804322B90D5F2003D1D82 /* FooterClosedButtonsView.swift */; };
 		3F58043A2B90D5F2003D1D82 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 3F5804332B90D5F2003D1D82 /* TitleView.swift */; };
@@ -65,11 +60,6 @@
 		3F1E6A702B84D09A00553D32 /* EmailModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EmailModel.swift; sourceTree = "<group>"; };
 		3F1E6A722B84D0A400553D32 /* ActionModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionModel.swift; sourceTree = "<group>"; };
 		3F1E6A762B85E6CC00553D32 /* OnboardingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OnboardingView.swift; sourceTree = "<group>"; };
-		3F1E6A782B85E6E200553D32 /* FirstView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FirstView.swift; sourceTree = "<group>"; };
-		3F1E6A7A2B85E6ED00553D32 /* SecondView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SecondView.swift; sourceTree = "<group>"; };
-		3F1E6A7D2B85E76F00553D32 /* TypingEffect.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TypingEffect.swift; sourceTree = "<group>"; };
-		3F1E6A7F2B85E9C900553D32 /* HomeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeView.swift; sourceTree = "<group>"; };
-		3F1E6A812B85EBBB00553D32 /* GeoView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeoView.swift; sourceTree = "<group>"; };
 		3F5804312B90D5F2003D1D82 /* FooterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FooterView.swift; sourceTree = "<group>"; };
 		3F5804322B90D5F2003D1D82 /* FooterClosedButtonsView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FooterClosedButtonsView.swift; sourceTree = "<group>"; };
 		3F5804332B90D5F2003D1D82 /* TitleView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
@@ -181,9 +171,6 @@
 			isa = PBXGroup;
 			children = (
 				3F1E6A762B85E6CC00553D32 /* OnboardingView.swift */,
-				3F1E6A782B85E6E200553D32 /* FirstView.swift */,
-				3F1E6A7A2B85E6ED00553D32 /* SecondView.swift */,
-				3F1E6A7F2B85E9C900553D32 /* HomeView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -191,8 +178,6 @@
 		3F1E6A7C2B85E75100553D32 /* utils */ = {
 			isa = PBXGroup;
 			children = (
-				3F1E6A7D2B85E76F00553D32 /* TypingEffect.swift */,
-				3F1E6A812B85EBBB00553D32 /* GeoView.swift */,
 			);
 			path = utils;
 			sourceTree = "<group>";
@@ -407,11 +392,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				3F1E6A6C2B84A3C200553D32 /* TopView.swift in Sources */,
-				3F1E6A792B85E6E200553D32 /* FirstView.swift in Sources */,
 				3FA70EEE2B7B66BC00AF7F4B /* ContentView.swift in Sources */,
-				3F1E6A802B85E9C900553D32 /* HomeView.swift in Sources */,
 				3F1E6A652B84A32100553D32 /* RegisterView.swift in Sources */,
-				3F1E6A7B2B85E6ED00553D32 /* SecondView.swift in Sources */,
 				3F1E6A6E2B84A3E100553D32 /* BottomView.swift in Sources */,
 				3FA70EEC2B7B66BC00AF7F4B /* CaleyApp.swift in Sources */,
 				3F1E6A732B84D0A400553D32 /* ActionModel.swift in Sources */,
@@ -420,12 +402,10 @@
 				3F1E6A712B84D09A00553D32 /* EmailModel.swift in Sources */,
 				3F1E6A6F2B84A45900553D32 /* AuthModel.swift in Sources */,
 				3F1E6A6A2B84A37900553D32 /* MailboxView.swift in Sources */,
-				3F1E6A7E2B85E76F00553D32 /* TypingEffect.swift in Sources */,
 				3F58043C2B90D5F2003D1D82 /* JeremyEmailView.swift in Sources */,
 				3F58043A2B90D5F2003D1D82 /* TitleView.swift in Sources */,
 				3F1E6A632B84A2F300553D32 /* LoginView.swift in Sources */,
 				3F58043B2B90D5F2003D1D82 /* EmailListItemView.swift in Sources */,
-				3F1E6A822B85EBBB00553D32 /* GeoView.swift in Sources */,
 				3F1E6A772B85E6CC00553D32 /* OnboardingView.swift in Sources */,
 				3F5804382B90D5F2003D1D82 /* FooterView.swift in Sources */,
 				3F58043D2B90D5F2003D1D82 /* EmailThreadView.swift in Sources */,

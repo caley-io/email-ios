@@ -8,36 +8,90 @@
 import SwiftUI
 
 struct OnboardingView: View {
-    @State private var showSview = false
-    @State private var showTview = false
-    @State private var showFview = false
+    @EnvironmentObject private var auth: MockAuthModel
+    @State var emails: [Mail] = []
+    
     var body: some View {
         ZStack {
-            Text("Swiftui Onboarding").bold().font(.largeTitle)
-                .offset(y: -100)
-                .padding(.leading,8)
+            VStack{
+                AlirezaEmailView()
+                JeremyEmailView()
+                
+                VStack {
+                    ForEach(emails, id: \.id) { email in
+                        EmailListItemView(email: email)
+                    }
+                }.onAppear(perform: {
+                    loadEmails()
+                })
+                .padding(.top)
+                .padding([.leading, .trailing], 14)
+                
+            }.mask(
+                LinearGradient(gradient: Gradient(colors: [Color.black, Color.black, Color.black.opacity(0), Color.black.opacity(0)]), startPoint: .top, endPoint: .bottom)
+            )
             
-            FirstView(showNextView: $showSview)
-            SecondView(showNextView: $showTview)
-                .modifier(ViewAnimation(isShow: showSview))
-            HomeView(showNextView: $showTview)
-                .modifier(ViewAnimation(isShow: showTview))
+            VStack {
+                Spacer()
+                
+                Image("logo")
+                    .resizable()
+                    .frame(width: 80, height: 80)
+                    .clipShape(Circle())
+                
+                Text("Welcome to Caley")
+                    .font(.title)
+                    .fontWeight(.bold)
+                    
+                
+                VStack {
+                    Button(action: {
+                        auth.signUp()
+                    }) {
+                            Text("Sign up")
+                            .padding()
+                            .fontWeight(.bold)
+                            .frame(maxWidth: .infinity)
+                          }
+                    .buttonStyle(.plain)
+                        .foregroundColor(.black)
+                        .background(Color("lightBg"))
+                        .cornerRadius(100)
+                    
+                    Button(action: {
+                        auth.signIn()
+                    }) {
+                            Text("Login")
+                              .padding()
+                              .fontWeight(.bold)
+                              .frame(maxWidth: .infinity)
+                    }.buttonStyle(.plain)
+                        .foregroundColor(.white)
+                        .background(.thinMaterial)
+                        .cornerRadius(100)
+                }.padding(.all)
+            }
+            
+        }
+    }
+    
+    func loadEmails() {
+        if let path = Bundle.main.path(forResource: "emails", ofType: "json") {
+            do {
+                let data = try Data(contentsOf: URL(fileURLWithPath: path))
+                let decoder = JSONDecoder()
+                self.emails = try decoder.decode([Mail].self, from: data)
+            } catch {
+                print("Error reading JSON: \(error)")
+                emails = []
+            }
+        } else {
+            print("JSON not found")
+            emails = []
         }
     }
 }
 
 #Preview {
-    OnboardingView()
-}
-
-struct ViewAnimation: ViewModifier{
-    
-    var isShow:Bool
-    func body(content: Content) -> some View {
-        content
-            .offset(x:  isShow ? 0 : 200)
-            .scaleEffect(isShow ? 1 : 0, anchor: .bottomTrailing)
-            .animation(.spring(), value: isShow)
-    }
-     
+    OnboardingView().preferredColorScheme(.dark)
 }
