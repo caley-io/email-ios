@@ -14,9 +14,7 @@ struct FooterView: View {
     }
     var body: some View {
         VStack {
-            if !self.open {
-                FooterClosedButtonsView()
-            } else {
+            if self.open {
                 HStack {
                     VStack(spacing: 20) {
                         HStack {

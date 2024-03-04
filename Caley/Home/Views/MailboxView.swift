@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct Mail: Codable {
+struct Mail: Codable, Equatable {
     let id: Int
     let subject: String
     let body: String
@@ -21,39 +21,29 @@ struct MailboxView: View {
     @State var emails: [Mail] = []
     
     var body: some View {
-        ZStack(alignment: .top) {
-            VStack {
-                TitleView(title: "Todo")
-                AlirezaEmailView()
-                JeremyEmailView()
-                TitleView(title: "Unread")
-                
-                ScrollView {
-                    ForEach(emails, id: \.id) { email in
-                        EmailListItemView(email: email)
-                            .onTapGesture {
-                                withAnimation(.spring(response: 0.35)) {
-                                    self.footerOpen = !self.footerOpen
-                                }
+        VStack {
+            TitleView(title: "All Emails")
+            ScrollView {
+                ForEach(emails, id: \.id) { email in
+                    EmailListItemView(email: email)
+                        .onTapGesture {
+                            withAnimation(.spring(response: 0.35)) {
+                                self.footerOpen = !self.footerOpen
                             }
-                    }
+                        }
                 }
-                .scrollIndicators(.hidden)
-                .padding([.leading, .trailing], 14)
             }
-            .padding(.top, 65)
-            .padding(.bottom, 85)
-            .background(.highlight)
-            .cornerRadius(20, corners: [.topLeft, .topRight])
-            .onAppear(perform: loadEmails)
-            .edgesIgnoringSafeArea(.all)
-            
-            VStack(spacing: 0) {
-                Spacer()
-                FooterView(open: footerOpen)
-            }
-            .edgesIgnoringSafeArea(.all)
+            .scrollIndicators(.hidden)
+            .padding([.leading, .trailing], 14)
         }
+        .padding(.top, 25)
+        .padding(.bottom, 85)
+        .background(.highlight)
+        .cornerRadius(20, corners: [.topLeft, .topRight])
+        .onAppear(perform: loadEmails)
+        .edgesIgnoringSafeArea(.all)
+        
+        
     }
     
     func loadEmails() {

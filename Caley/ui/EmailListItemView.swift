@@ -14,7 +14,7 @@ struct EmailListItemView: View {
     }
     
     var body: some View {
-        HStack {
+        HStack(alignment: .top) {
             VStack {
                 Image(self.email.image)
                     .resizable()
@@ -65,9 +65,6 @@ struct EmailListItemView: View {
                     }
                 }
             }
-            
-            
-            Spacer()
         }
         .padding(.bottom, 7)
     }

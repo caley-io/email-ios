@@ -16,7 +16,7 @@ struct TitleView: View {
     var body: some View {
         HStack {
             Text(self.title)
-                .font(.system(size: 16, weight: .medium))
+                .font(.system(size: 16, weight: .bold))
                 .padding([.leading, .trailing], 14)
                 .padding(.bottom, 14)
             

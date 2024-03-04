@@ -22,7 +22,55 @@ struct OnboardingView: View {
                 
                 VStack {
                     ForEach(emails, id: \.id) { email in
-                        EmailListItemView(email: email)
+                        HStack(alignment: .top) {
+                            VStack {
+                                Image(email.image)
+                                    .resizable()
+                                    .frame(width: 23, height: 23)
+                                    .clipShape(Circle())
+                                
+                                Spacer()
+                            }
+                            
+                            VStack(spacing: 4) {
+                                HStack {
+                                    
+                                    
+                                    Text(email.author)
+                                        .font(.system(size: 14, weight: .medium))
+                                    
+                                    Spacer()
+                                    
+                                    Text("2:29pm")
+                                        .font(.system(size: 13, weight: .medium))
+                                        .foregroundStyle(.gray)
+                                }
+                                
+                                HStack {
+                                    Text(email.subject)
+                                        .font(.system(size: 13, weight: .medium))
+                                    
+                                    Spacer()
+                                }
+                                
+                                HStack {
+                                    Text(email.body)
+                                        .font(.system(size: 13, weight: .medium))
+                                        .foregroundStyle(.gray)
+                                        .lineLimit(1)
+                                        .truncationMode(.tail)
+                                    
+                                    Spacer()
+                                    HStack {
+                                        Image(systemName: "book.pages")
+                                            .font(.system(size: 13))
+                                        Text("2 min")
+                                            .font(.system(size: 13))
+                                    }
+                                }
+                            }
+                        }
+                        .padding(.bottom, 0)
                     }
                 }.onAppear(perform: {
                     loadEmails()
@@ -45,31 +93,31 @@ struct OnboardingView: View {
                 Text("Welcome to Caley")
                     .font(.title)
                     .fontWeight(.bold)
-                    
+                
                 
                 VStack {
                     Button(action: {
                         auth.signUp()
                         self.showAuthenticationModal = true
                     }) {
-                            Text("Sign up")
+                        Text("Sign up")
                             .padding()
                             .fontWeight(.bold)
                             .frame(maxWidth: .infinity)
-                          }
+                    }
                     .buttonStyle(.plain)
-                        .foregroundColor(.black)
-                        .background(Color("lightBg"))
-                        .cornerRadius(100)
+                    .foregroundColor(.black)
+                    .background(Color("lightBg"))
+                    .cornerRadius(100)
                     
                     Button(action: {
                         auth.signIn()
                         self.showAuthenticationModal = true
                     }) {
-                            Text("Login")
-                              .padding()
-                              .fontWeight(.bold)
-                              .frame(maxWidth: .infinity)
+                        Text("Login")
+                            .padding()
+                            .fontWeight(.bold)
+                            .frame(maxWidth: .infinity)
                     }.buttonStyle(.plain)
                         .foregroundColor(.white)
                         .background(.thinMaterial)
@@ -79,21 +127,21 @@ struct OnboardingView: View {
             
         }
         .sheet(isPresented: $showAuthenticationModal) {
-                VStack(alignment: .leading) {
-                    if auth.isAuthState == .signinUp  {
-                        RegisterView()
-                    } else {
-                        LoginView(error: nil) {
-                            signin in
-                            
-                            print("got signin \(signin)")
-                        }
+            VStack(alignment: .leading) {
+                if auth.isAuthState == .signinUp  {
+                    RegisterView()
+                } else {
+                    LoginView(error: nil) {
+                        signin in
+                        
+                        print("got signin \(signin)")
                     }
                 }
-                .padding(.all, 10)
-                .padding(.top, 20)
-                .background(Color(UIColor.systemBackground))
-                .edgesIgnoringSafeArea([.all])
+            }
+            .padding(.all, 10)
+            .padding(.top, 20)
+            .background(Color(UIColor.systemBackground))
+            .edgesIgnoringSafeArea([.all])
         }
     }
     

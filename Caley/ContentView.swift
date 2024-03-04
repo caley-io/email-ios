@@ -22,7 +22,7 @@ struct ContentView: View {
         switch auth.state {
             
         case .signedIn:
-            MailboxView()
+            SplitView()
             
         case .notSignedIn(let error):
             OnboardingView()
